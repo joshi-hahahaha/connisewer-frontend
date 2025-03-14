@@ -1,10 +1,18 @@
 'use client'
 import React, { useState } from "react";
-export default function Review({ review }) {
-  const [user, setUser] = useState("John_Doe2")
+import { useRouter } from 'next/navigation'
+import { ReviewType } from "./page";
+
+type ReviewProps = {
+  review: ReviewType;
+};
+
+export default function Review({ review } : ReviewProps) {
+  const router = useRouter();
 
   const navigate_to_review = () => {
-    console.log("navigating")  
+    console.log("navigating")
+    router.push(`/?toilet=${review.id}`);
   }
 
   return (
@@ -13,11 +21,11 @@ export default function Review({ review }) {
         <h2 className="card-title">{review.title}</h2>
         <p>{review.desc}</p>
         <div className="card-actions justify-end">
-          <button className="btn bg-primary text-primary-content" onClick={() => navigate_to_review}>Show on map</button>
+          <button className="btn bg-primary text-primary-content" onClick={() => navigate_to_review()}>Show on map</button>
         </div>
         <div>
-          <p>{review.rating}</p>
-          <p>{review.created_at}e</p>
+          <p>Rating: {review.rating}</p>
+          <p>Created at: {review.created_at}e</p>
         </div>
       </div>
     </div>
