@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import Navbar from "../navbar/Navbar";
 
 const userLocationIcon = new L.Icon({
   iconUrl: "/location-crosshairs-solid.svg",
@@ -54,12 +55,13 @@ const LandingMap = () => {
   const defaultCenter: [number, number] = [33.8708, 151.2073];
 
   return (
-    <div className="h-screen w-screen">
+    <div className="h-screen w-screen z-0">
       <MapContainer
         center={userLocation || defaultCenter}
         zoom={13}
         className="h-full w-full"
       >
+        <Navbar />
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
