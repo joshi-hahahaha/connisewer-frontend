@@ -51,7 +51,7 @@ export default function Toilet({ toilet, setSelectedToilet }: ToiletProps) {
           <div className="absolute max-w-6xl mx-auto min-h-80 bottom-4 left-4 right-4 bg-base-100 text-primary-content flex p-4 justify-between px-6 rounded-xl shadow-md z-[1000]">
             <div>
               <p className="text-4xl">{toilet.title}</p>
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center my-1">
                 <RatingRead rating={toilet.rating} />
                 <p>{toilet.rating}</p>
               </div>
@@ -60,7 +60,7 @@ export default function Toilet({ toilet, setSelectedToilet }: ToiletProps) {
               <Comments comments={comments} />
             </div>
             <div>
-              <button className="btn" onClick={() => setSelectedToilet(null)}>close</button>
+              <button className="btn rounded-full bg-accent text-accent-content" onClick={() => setSelectedToilet(null)}>x</button>
             </div>
           </div>
         )
