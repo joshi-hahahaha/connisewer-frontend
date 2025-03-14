@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import Profile from "./Profile";
-import { Navbar } from "./Navbar";
+import Navbar from "./Navbar";
 import Review from "./Review";
 
 export type ReviewType = {
@@ -94,13 +94,13 @@ export default function User() {
   return (
     <>
       <Navbar />
-      <div className="w-full h-full pt-24 max-w-5xl mx-auto">
+      <div className="w-full h-full pt-24 max-w-5xl mx-auto bg-base-100">
         <Profile />
         <div className="divider">My Reviews</div>
         <section className="mx-auto mb-24">
           <div className="filter m-2 gap-2">
             {["Most Recent", "Oldest", "Highest Rated", "Lowest Rated"].map((option) => (
-              <label key={option} className={`btn ${sortBy === option ? 'bg-base-300' : ''}`}>
+              <label key={option} className={`btn ${sortBy === option ? 'bg-base-300' : 'bg-base-100'}`}>
                 <input
                   type="radio"
                   name="sortBy"
