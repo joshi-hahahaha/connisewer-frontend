@@ -5,9 +5,8 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// Custom icon for the user's location marker
 const userLocationIcon = new L.Icon({
-  iconUrl: "/user-location-icon.png", // Ensure this image exists in your public folder
+  iconUrl: "/location-crosshairs-solid.svg",
   iconSize: [32, 32],
   iconAnchor: [16, 32],
   popupAnchor: [0, -32],
@@ -69,7 +68,7 @@ const LandingMap = () => {
         <LocationUpdater setUserLocation={setUserLocation} />
         {userLocation && (
           <Marker position={userLocation} icon={userLocationIcon}>
-            <Popup>You are here</Popup>
+            <Popup>You are here!</Popup>
           </Marker>
         )}
       </MapContainer>
