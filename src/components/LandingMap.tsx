@@ -29,8 +29,8 @@ const LocationUpdater = ({
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        setPosition([latitude, longitude]); // Update local state
-        setUserLocation([latitude, longitude]); // Update parent state
+        setPosition([latitude, longitude]);
+        setUserLocation([latitude, longitude]);
         map.setView([latitude, longitude], 13);
       },
       (error) => {
@@ -51,7 +51,6 @@ const LandingMap = () => {
     null
   );
 
-  // Default center (fallback)
   const defaultCenter: [number, number] = [33.8708, 151.2073];
 
   return (
