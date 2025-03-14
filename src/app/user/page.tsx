@@ -1,7 +1,8 @@
 'use client'
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import Profile from "./Profile";
+import { Navbar } from "./Navbar";
+import Review from "./Review";
 
 export default function User() {
   const [sortBy, setSortBy] = useState("Most Recent");
@@ -69,6 +70,7 @@ export default function User() {
 
   return (
     <div className="w-full h-full">
+      <Navbar />
       <div className="mx-auto">
         <Profile />
       </div>
@@ -92,21 +94,9 @@ export default function User() {
       <div className="flex flex-col gap-2 place-items-center">
         {
           myReviews.map((review, i) => (
-            <div className="card bg-base-300 w-140" key={i}>
-              <div className="card-body">
-                <h2 className="card-title">{review.title}</h2>
-                <p>{review.desc}</p>
-                <div className="card-actions justify-end">
-                  <button className="btn bg-primary text-primary-content">Show on map</button>
-                </div>
-                <div>
-                  <p>{review.rating}</p>
-                  <p>{review.created_at}e</p>
-                </div>
-              </div>
-            </div>
+            <Review review={review} key={i} />
           ))
-        }
+        } 
       </div>
     </div>
   );
