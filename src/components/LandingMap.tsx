@@ -52,7 +52,7 @@ const LandingMap = () => {
   );
 
   // Default center (fallback)
-  const defaultCenter: [number, number] = [51.505, -0.09];
+  const defaultCenter: [number, number] = [33.8708, 151.2073];
 
   return (
     <div className="h-screen w-screen">
