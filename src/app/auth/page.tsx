@@ -24,16 +24,16 @@ const AuthPage = () => {
     e.preventDefault();
     setLoading(true);
 
-    const endpoint = isLogin ? "login" : "register";
+    const endpoint = isLogin ? "login" : "user/add";
     const body = isLogin
       ? { username: formData.username, password: formData.password }
       : {
           username: formData.username,
           email: formData.email,
           password: formData.password,
-          confirmPassword: formData.confirmPassword,
         };
 
+    console.log(body);
     try {
       const res = await fetch(`${API}/${endpoint}`, {
         method: "POST",
@@ -54,15 +54,17 @@ const AuthPage = () => {
     <div className="flex h-screen">
       {/* Left Side - Background Image */}
       <div
-        className="w-1/2 bg-cover bg-center flex items-center justify-center text-white text-4xl font-bold"
-        style={{ backgroundImage: "url('/your-image.jpg')" }}
+        className="w-1/2 bg-cover bg-center flex items-center justify-center text-white text-4xl glass font-bold"
+        style={{ backgroundImage: "url('/conniseur_background.jpg')" }}
       >
-        Connisewer
+        <div className="w-full h-full bg-black/30 flex justify-center items-center">
+          <div className="text-5xl">Connisewer</div>
+        </div>
       </div>
 
       {/* Right Side - Login / Register Form */}
-      <div className="w-1/2 flex items-center justify-center bg-white">
-        <div className="w-full max-w-md p-8 shadow-lg rounded-lg">
+      <div className="w-1/2 flex items-center justify-center bg-base">
+        <div className="w-full max-w-md p-8 shadow-lg rounded-lg bg-neutral-content">
           <h2 className="text-2xl text-base-content font-semibold mb-6 text-center">
             {isLogin ? "Login" : "Sign Up"}
           </h2>
