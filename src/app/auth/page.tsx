@@ -1,6 +1,7 @@
 "use client";
 
 import { API } from "@/constants";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const AuthPage = () => {
@@ -11,6 +12,8 @@ const AuthPage = () => {
     password: "",
     confirmPassword: "",
   });
+
+  const router = useRouter();
 
   const [loading, setLoading] = useState(false);
 
@@ -50,6 +53,10 @@ const AuthPage = () => {
     }
   };
 
+  const handleLogoClick = () => {
+    router.push("/");
+  };
+
   return (
     <div className="flex h-screen">
       {/* Left Side - Background Image */}
@@ -58,13 +65,15 @@ const AuthPage = () => {
         style={{ backgroundImage: "url('/conniseur_background.jpg')" }}
       >
         <div className="w-full h-full bg-black/30 flex justify-center items-center">
-          <div className="text-5xl">Connisewer</div>
+          <div onClick={handleLogoClick} className="text-5xl">
+            Connisewer
+          </div>
         </div>
       </div>
 
       {/* Right Side - Login / Register Form */}
-      <div className="w-1/2 flex items-center justify-center bg-base-300">
-        <div className="w-full max-w-md p-8 border-1 shadow-lg rounded-lg bg-transparent border-base-neutral">
+      <div className="w-1/2 flex items-center justify-center bg-base-100">
+        <div className="w-full max-w-lg p-8 border-2 shadow-lg rounded-lg bg-transparent border-accent ">
           <form onSubmit={handleSubmit}>
             <fieldset className="fieldset border-base-300 p-4 rounded-box">
               <legend className="fieldset-legend text-3xl">
@@ -135,9 +144,10 @@ const AuthPage = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white mt-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+              className="w-full bg-secondary text-white mt-4 py-2 rounded-lg hover:bg-secondary-content transition duration-300"
               disabled={loading}
             >
+              <div className="text-secondary-content"></div>
               {loading ? "Loading..." : isLogin ? "Login" : "Sign Up"}
             </button>
           </form>
@@ -147,7 +157,7 @@ const AuthPage = () => {
             {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className="text-blue-500 hover:underline"
+              className="text-secondary hover:text-secondary-content  hover:underline"
             >
               {isLogin ? "Sign Up" : "Login"}
             </button>
