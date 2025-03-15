@@ -27,7 +27,7 @@ const AuthPage = () => {
     e.preventDefault();
     setLoading(true);
 
-    const endpoint = isLogin ? "login" : "user/add";
+    const endpoint = isLogin ? "login" : "register";
     const body = isLogin
       ? { username: formData.username, password: formData.password }
       : {
