@@ -12,12 +12,9 @@ const AuthPage = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
 
   useEffect(() => {
-    if (type === "login") {
-      setIsLogin(true);
-    } else {
-      setIsLogin(false);
-    }
+    setIsLogin(type === "login");
   }, [type]);
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -26,8 +23,8 @@ const AuthPage = () => {
   });
 
   const router = useRouter();
-
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Handle form input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,6 +35,13 @@ const AuthPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
+
+    if (!isLogin && formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
 
     const endpoint = isLogin ? "user/login" : "user/register";
     const body = isLogin
@@ -48,7 +52,6 @@ const AuthPage = () => {
           password: formData.password,
         };
 
-    console.log(body);
     try {
       const res = await fetch(`${API}/${endpoint}`, {
         method: "POST",
@@ -56,19 +59,24 @@ const AuthPage = () => {
         body: JSON.stringify(body),
       });
 
-      const data = await res.json();
-      console.log(data);
+      if (!res.ok) {
+        throw new Error("Authentication failed. Please try again.");
+      }
 
-      return data;
+      const data = await res.json();
+      console.log("Response:", data);
+
+      if (data.access_token) {
+        localStorage.setItem("token", data.access_token);
+        router.push("/");
+      } else {
+        throw new Error("Invalid response from server.");
+      }
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleLogoClick = () => {
-    router.push("/");
   };
 
   return (
@@ -80,7 +88,7 @@ const AuthPage = () => {
       >
         <div className="w-full h-full bg-black/30 flex justify-center items-center">
           <div
-            onClick={handleLogoClick}
+            onClick={() => router.push("/")}
             className="text-5xl hover:cursor-pointer"
           >
             Connisewer
@@ -90,7 +98,7 @@ const AuthPage = () => {
 
       {/* Right Side - Login / Register Form */}
       <div className="w-1/2 flex items-center justify-center bg-base-100">
-        <div className="w-full max-w-lg p-8 border-2 shadow-lg rounded-lg bg-transparent border-accent ">
+        <div className="w-full max-w-lg p-8 border-2 shadow-lg rounded-lg bg-transparent border-accent">
           <form onSubmit={handleSubmit}>
             <fieldset className="fieldset border-base-300 p-4 rounded-box">
               <legend className="fieldset-legend text-3xl">
@@ -122,7 +130,7 @@ const AuthPage = () => {
                   placeholder="Email"
                   value={formData.email}
                   onChange={handleChange}
-                  required
+                  required={!isLogin}
                 />
               </div>
 
@@ -143,7 +151,7 @@ const AuthPage = () => {
               {/* Confirm Password (Only for Registration) */}
               {!isLogin && (
                 <div className="my-2">
-                  <div className="divider "></div>
+                  <div className="divider"></div>
                   <label className="fieldset-label">Confirm Password</label>
                   <input
                     type="password"
@@ -158,13 +166,15 @@ const AuthPage = () => {
               )}
             </fieldset>
 
+            {/* Display error message if exists */}
+            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
             {/* Submit Button */}
             <button
               type="submit"
               className="w-full bg-secondary text-white mt-4 py-2 rounded-lg hover:cursor-pointer hover:bg-secondary-content transition duration-300"
               disabled={loading}
             >
-              <div className="text-secondary-content"></div>
               {loading ? "Loading..." : isLogin ? "Login" : "Sign Up"}
             </button>
           </form>
@@ -187,8 +197,14 @@ const AuthPage = () => {
 
 export default function Auth() {
   return (
-    <Suspense fallback={<div className="w-screen h-screen grid place-items-center"><p>Loading...</p></div>}>
+    <Suspense
+      fallback={
+        <div className="w-screen h-screen grid place-items-center">
+          <p>Loading...</p>
+        </div>
+      }
+    >
       <AuthPage />
     </Suspense>
-  )
+  );
 }
