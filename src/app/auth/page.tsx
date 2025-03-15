@@ -73,35 +73,34 @@ const AuthPage = () => {
                 {isLogin ? "Login" : "Register"}
               </legend>
 
-              {/* Username */}
-              <div className="mt-2">
-                <label className="fieldset-label">Username</label>
-                <input
-                  type="text"
-                  name="username"
-                  className="input w-full text-base-content"
-                  placeholder="Username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              {/* Email (Only for Registration) */}
               {!isLogin && (
                 <div className="mt-2">
-                  <label className="fieldset-label">Email</label>
+                  <label className="fieldset-label">Username</label>
                   <input
-                    type="email"
-                    name="email"
+                    type="text"
+                    name="username"
                     className="input w-full text-base-content"
-                    placeholder="Email"
-                    value={formData.email}
+                    placeholder="Username"
+                    value={formData.username}
                     onChange={handleChange}
                     required
                   />
                 </div>
               )}
+
+              {/* Email (Only for Registration) */}
+              <div className="mt-2">
+                <label className="fieldset-label">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  className="input w-full text-base-content"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
               {/* Password */}
               <div className="mt-2">
