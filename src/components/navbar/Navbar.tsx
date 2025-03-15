@@ -22,7 +22,7 @@ function Navbar() {
       </Link>
 
       {/* Center: Search Bar (Visually Centered) */}
-      <div className="absolute left-1/2 -translate-x-1/2">
+      <div className="hidden sm:block absolute left-1/2 -translate-x-1/2">
         <label className="input bg-base-100 text-lg">
           <svg
             className="h-[1em] opacity-50 stroke-accent"

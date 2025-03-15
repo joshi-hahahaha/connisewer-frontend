@@ -2,7 +2,7 @@
 
 import { API } from "@/constants";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 const AuthPage = () => {
@@ -185,4 +185,10 @@ const AuthPage = () => {
   );
 };
 
-export default AuthPage;
+export default function Auth() {
+  return (
+    <Suspense fallback={<div className="w-screen h-screen grid place-items-center"><p>Loading...</p></div>}>
+      <AuthPage />
+    </Suspense>
+  )
+}

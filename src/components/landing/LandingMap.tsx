@@ -5,7 +5,9 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import Navbar from "../navbar/Navbar";
-import Toilet, { ToiletType } from "./Toilet";
+import ToiletInfo from "./ToiletInfo";
+import { PublicToilets, ToiletType } from "./PublicToilets";
+import RoutingMachine from "./RoutingMachine";
 
 const userLocationIcon = new L.Icon({
   iconUrl: "/location-crosshairs-solid.svg",
@@ -13,13 +15,6 @@ const userLocationIcon = new L.Icon({
   iconAnchor: [16, 32],
   popupAnchor: [0, -32],
 });
-
-const toiletLocationIcon = new L.Icon({
-  iconUrl: "/pin-location-icon.svg",
-  iconSize: [36, 36],
-  iconAnchor: [18, 18],
-  popupAnchor: [0, -36],
-})
 
 const LocationUpdater = ({
   setUserLocation,
@@ -40,7 +35,7 @@ const LocationUpdater = ({
         const { latitude, longitude } = position.coords;
         setPosition([latitude, longitude]);
         setUserLocation([latitude, longitude]);
-        map.setView([latitude, longitude], 13);
+        map.setView([latitude, longitude], 15);
       },
       (error) => {
         console.error("Error getting location:", error);
@@ -55,77 +50,60 @@ const LocationUpdater = ({
   ) : null;
 };
 
-const LandingMap = () => {
-  const [userLocation, setUserLocation] = useState<[number, number] | null>(
-    null
-  );
+const SearchArea = ({ setBounds }: { setBounds: (bounds: [number, number, number, number] | null) => void }) => {
+  const map = useMap();
+  return (
+    <button className="btn btn-primary text-primary-content absolute top-28 left-18 z-[1000]" onClick={() => {
+      const bounds = map.getBounds();
+      setBounds([
+        bounds.getSouth(),
+        bounds.getWest(),
+        bounds.getNorth(),
+        bounds.getEast()
+      ])
+    }}>
+      <svg fill="#000000" height="20" width="20" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52.966 52.966" ><path d="M51.704,51.273L36.845,35.82c3.79-3.801,6.138-9.041,6.138-14.82c0-11.58-9.42-21-21-21s-21,9.42-21,21s9.42,21,21,21 c5.083,0,9.748-1.817,13.384-4.832l14.895,15.491c0.196,0.205,0.458,0.307,0.721,0.307c0.25,0,0.499-0.093,0.693-0.279 C52.074,52.304,52.086,51.671,51.704,51.273z M21.983,40c-10.477,0-19-8.523-19-19s8.523-19,19-19s19,8.523,19,19	S32.459,40,21.983,40z" /></svg>
+      <p>Search This Area</p></button>
+  )
+}
 
-  const [toilets, setToilets] = useState<ToiletType[]>([])
+const LandingMap = () => {
+  const defaultCenter: [number, number] = [-33.8708, 151.2073];
+  const [userLocation, setUserLocation] = useState<[number, number]>(defaultCenter);
+  const [zoom,] = useState(11);
   const [selectedToilet, setSelectedToilet] = useState<ToiletType | null>(null);
+  const [routeFinish, setRouteFinish] = useState<[number, number] | null>(null);
+  const [showToilets, setShowToilets] = useState<boolean>(true);
+  const [bounds, setBounds] = useState<[number, number, number, number] | null>(null);
 
   useEffect(() => {
-    async function getToilets() {
-      // should be asking the backend to get some toilets within a longtitude and latitude bounds
-      setToilets([
-        {
-          id: 1,
-          longitude: 151.146661,
-          latitude: -33.8781802,
-          title: "Times Square Public Restroom",
-          rating: 4.2,
-          created_at: "2025-03-14T12:30:00Z",
-          desc: "Clean and well-maintained restroom in the heart of Times Square."
-        },
-        {
-          id: 2,
-          longitude: 151.1278,
-          latitude: -33.8074,
-          title: "London Underground Toilet",
-          rating: 3.2,
-          created_at: "2025-03-12T15:45:00Z",
-          desc: "Small but functional toilet inside a Tube station."
-        },
-        {
-          id: 3,
-          longitude: 151.22868658,
-          latitude: -33.898568458,
-          title: "Shinjuku Station Restroom",
-          rating: 4.8,
-          created_at: "2025-03-10T09:00:00Z",
-          desc: "Very clean and modern restroom in Shinjuku Station."
-        },
-        {
-          id: 4,
-          longitude: 151.22790360,
-          latitude: -33.91680088,
-          title: "Louvre Museum Toilet",
-          rating: 2.0,
-          created_at: "2025-03-11T18:20:00Z",
-          desc: "Conveniently located inside the Louvre, but often crowded."
-        },
-        {
-          id: 5,
-          longitude: 151.2093,
-          latitude: -33.8688,
-          title: "Sydney Harbour Public Toilet",
-          rating: 4.5,
-          created_at: "2025-03-13T08:10:00Z",
-          desc: "Great view and clean facilities near Sydney Opera House."
+    if (!!navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        setBounds([latitude - 0.1, longitude - 0.15, latitude + 0.1, longitude + 0.15])
+      },
+        (error) => {
+          console.error("Error getting location:", error);
+          setBounds([defaultCenter[0] - 0.05, defaultCenter[1] - 0.05, defaultCenter[0] + 0.05, defaultCenter[1] + 0.05]);
         }
-      ]);
+      );
     }
-
-    getToilets();
   }, []);
 
-  const defaultCenter: [number, number] = [33.8708, 151.2073];
+  useEffect(() => {
+    setShowToilets(!routeFinish) // hide toilets when routing
+  }, [routeFinish]);
+
+  useEffect(() => {
+    if (selectedToilet == null) setRouteFinish(null);
+  }, [selectedToilet]);
 
   return (
     <div className="h-screen w-screen z-0">
       <Navbar />
       <MapContainer
         center={userLocation || defaultCenter}
-        zoom={13}
+        zoom={zoom}
         className="h-full w-full"
       >
         <TileLayer
@@ -139,23 +117,11 @@ const LandingMap = () => {
           </Marker>
         )}
 
-        {
-          toilets.map((toilet, index) => (
-            <Marker
-              position={[toilet.latitude, toilet.longitude]}
-              key={index} icon={toiletLocationIcon}
-              eventHandlers={{
-                click: () => {
-                  setSelectedToilet(toilet);
-                },
-              }}>
-              <Popup>{toilet.title}</Popup>
-            </Marker>
-          ))
-        }
-
+        {showToilets && !!bounds && <PublicToilets bbox={bounds} setSelectedToilet={setSelectedToilet} />}
+        <SearchArea setBounds={setBounds} />
+        <RoutingMachine start={userLocation} finish={routeFinish} />
       </MapContainer>
-      <Toilet toilet={selectedToilet} setSelectedToilet={setSelectedToilet} />
+      <ToiletInfo toilet={selectedToilet} setSelectedToilet={setSelectedToilet} setRouteFinish={setRouteFinish} />
     </div>
   );
 };
