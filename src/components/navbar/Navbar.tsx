@@ -61,13 +61,13 @@ function Navbar() {
           <>
             <button
               onClick={() => router.push("/auth?type=login")}
-              className="mr-4"
+              className="btn btn-primary"
             >
               Login
             </button>
             <button
-              onClick={() => router.push("/auth?type=signup")}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              onClick={() => router.push("/auth?type=register")}
+              className="btn btn-secondary"
             >
               Sign Up
             </button>

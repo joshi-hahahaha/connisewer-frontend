@@ -2,10 +2,22 @@
 
 import { API } from "@/constants";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 const AuthPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
+
+  const [isLogin, setIsLogin] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (type === "login") {
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+    }
+  }, [type]);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
