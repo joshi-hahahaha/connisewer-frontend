@@ -7,9 +7,10 @@ import Review, { ReviewType } from "./Review";
 type ToiletProps = {
   toilet: ToiletType | null;
   setSelectedToilet: (toilet: ToiletType | null) => void;
+  setRouteFinish: (x: [number, number] | null) => void;
 };
 
-export default function ToiletInfo({ toilet, setSelectedToilet }: ToiletProps) {
+export default function ToiletInfo({ toilet, setSelectedToilet, setRouteFinish }: ToiletProps) {
   const [reviews, setReviews] = useState<ReviewType[]>([]);
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export default function ToiletInfo({ toilet, setSelectedToilet }: ToiletProps) {
           user: userInfo.name
         };
       }));
-    
+
       setReviews(thingo);
     }
 
@@ -57,6 +58,11 @@ export default function ToiletInfo({ toilet, setSelectedToilet }: ToiletProps) {
               <p className="text-xs">{toilet.id}</p>
               <p className="text-sm">Coordinates: {toilet.lat}, {toilet.lon}</p>
               <p>{toilet.desc}</p>
+              <div className="flex gap-2 mt-2">
+                <button className="btn btn-outline btn-accent text-accent-content">Add Review</button>
+                <button className="btn btn-outline btn-primary text-primary-content" onClick={() => setRouteFinish([toilet.lat, toilet.lon])}>Directions</button>
+                <button className="btn btn-outline btn-acccent">Share</button>
+              </div>
               <div className="divider"></div>
               <p className="text-xl underline">Reviews</p>
               <div className="flex flex-col gap-4 text-sm text-base-content">
