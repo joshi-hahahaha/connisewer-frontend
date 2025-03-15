@@ -54,7 +54,7 @@ const AuthPage = () => {
     <div className="flex h-screen">
       {/* Left Side - Background Image */}
       <div
-        className="w-1/2 bg-cover bg-center flex items-center justify-center text-white text-4xl glass font-bold"
+        className="w-1/2 bg-cover bg-center flex items-center justify-center text-white text-4xl font-bold"
         style={{ backgroundImage: "url('/conniseur_background.jpg')" }}
       >
         <div className="w-full h-full bg-black/30 flex justify-center items-center">
@@ -63,16 +63,12 @@ const AuthPage = () => {
       </div>
 
       {/* Right Side - Login / Register Form */}
-      <div className="w-1/2 flex items-center justify-center bg-base">
-        <div className="w-full max-w-md p-8 shadow-lg rounded-lg bg-neutral-content">
-          <h2 className="text-2xl text-base-content font-semibold mb-6 text-center">
-            {isLogin ? "Login" : "Sign Up"}
-          </h2>
-
+      <div className="w-1/2 flex items-center justify-center bg-base-300">
+        <div className="w-full max-w-md p-8 border-1 shadow-lg rounded-lg bg-transparent border-base-neutral">
           <form onSubmit={handleSubmit}>
-            <fieldset className="fieldset border border-base-300 p-4 rounded-box">
-              <legend className="fieldset-legend">
-                {isLogin ? "Login" : "Register"}
+            <fieldset className="fieldset border-base-300 p-4 rounded-box">
+              <legend className="fieldset-legend text-3xl">
+                {isLogin ? "Log In" : "Register"}
               </legend>
 
               {!isLogin && (
@@ -121,7 +117,7 @@ const AuthPage = () => {
               {/* Confirm Password (Only for Registration) */}
               {!isLogin && (
                 <div className="my-2">
-                  <div className="divider"></div>
+                  <div className="divider "></div>
                   <label className="fieldset-label">Confirm Password</label>
                   <input
                     type="password"
