@@ -27,7 +27,7 @@ const AuthPage = () => {
     e.preventDefault();
     setLoading(true);
 
-    const endpoint = isLogin ? "login" : "register";
+    const endpoint = isLogin ? "user/login" : "user/register";
     const body = isLogin
       ? { username: formData.username, password: formData.password }
       : {
@@ -65,7 +65,10 @@ const AuthPage = () => {
         style={{ backgroundImage: "url('/conniseur_background.jpg')" }}
       >
         <div className="w-full h-full bg-black/30 flex justify-center items-center">
-          <div onClick={handleLogoClick} className="text-5xl">
+          <div
+            onClick={handleLogoClick}
+            className="text-5xl hover:cursor-pointer"
+          >
             Connisewer
           </div>
         </div>
@@ -144,7 +147,7 @@ const AuthPage = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-secondary text-white mt-4 py-2 rounded-lg hover:bg-secondary-content transition duration-300"
+              className="w-full bg-secondary text-white mt-4 py-2 rounded-lg hover:cursor-pointer hover:bg-secondary-content transition duration-300"
               disabled={loading}
             >
               <div className="text-secondary-content"></div>
@@ -157,7 +160,7 @@ const AuthPage = () => {
             {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className="text-secondary hover:text-secondary-content  hover:underline"
+              className="text-secondary hover:text-secondary-content hover:cursor-pointer hover:underline"
             >
               {isLogin ? "Sign Up" : "Login"}
             </button>
