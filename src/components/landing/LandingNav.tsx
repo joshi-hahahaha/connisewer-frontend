@@ -25,7 +25,7 @@ function LandingNav({
 
   const handleSearch = async () => {
     if (!searchBarValue || searchBarValue === "") return;
-    const geocoder = L.Control.Geocoder.nominatim();
+    const geocoder = L.Control.Geocoder.nominatim({ limit: 20 });
     console.log("going to try to geocode: " + geocoder.geocode);
 
     const res = await geocoder.geocode(searchBarValue);
@@ -67,7 +67,7 @@ function LandingNav({
       <div className="join">
         <input
           popoverTarget="popover-1"
-          className="input join-item w-full"
+          className="input join-item w-full text-primary-content"
           placeholder="Search"
           value={searchBarValue}
           onChange={(e) => setSearchBarValue(e.target.value)}
@@ -80,14 +80,14 @@ function LandingNav({
       {/* Dropdown appears only when there are values */}
       {searchDropDownValues.length > 0 && (
         <ul
-          className="absolute left-0 w-full shadow-lg border mt-1 z-100 bg-white rounded-md overflow-hidden max-h-60 overflow-y-auto "
+          className="absolute left-0 w-full shadow-lg border mt-1 z-100 bg-base-100 rounded-md overflow-hidden max-h-60 overflow-y-auto "
           id="popover-1"
           style={{ top: "100%", position: "absolute" }}
         >
           {searchDropDownValues.map((x, i) => (
             <li key={i} className="border-b last:border-none">
               <button
-                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                className="block w-full text-left px-4 py-2 text-primary-content hover:bg-gray-100"
                 onClick={() => handleDropDownSelect(x)}
               >
                 {x.name}
