@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { ToiletType } from "./PublicToilets";
 import Review, { ReviewType } from "./Review";
 import RatingRead from "./RatingRead";
+import { API } from "@/constants";
 
 type ToiletProps = {
   toilet: ToiletType | null;
@@ -18,6 +19,9 @@ export default function ToiletInfo({
 }: ToiletProps) {
   const [reviews, setReviews] = useState<ReviewType[]>([]);
   const [avgRating, setAvgRating] = useState<number | null>(null);
+  const [reviewText, setReviewText] = useState("");
+  const [rating, setRating] = useState<number | null>(null);
+
   useEffect(() => {
     async function getReviews() {
       const res = await fetch(
@@ -63,6 +67,61 @@ export default function ToiletInfo({
     }
   }, [toilet]);
 
+  useEffect(() => {
+    async function getReviews() {
+      if (!toilet) return;
+      const res = await fetch(`${API}/reviews/toiletId=${toilet?.id}`);
+      if (!res.ok) {
+        console.log(res);
+        return;
+      }
+
+      const data: { reviews: ReviewType[]; average: number } = await res.json();
+
+      if (data.reviews) {
+        setReviews(data.reviews);
+      }
+
+      if (data.average) {
+        setAvgRating(data.average);
+      }
+    }
+
+    if (toilet !== null) {
+      getReviews();
+    }
+  }, [toilet]);
+
+  const handleReviewSubmit = async () => {
+    console.log(rating);
+    console.log(reviewText);
+    if (!reviewText || !rating || !toilet) return;
+
+    const res = await fetch(
+      `${API}/user/post-review?toilet_id=${toilet.id}&text=${reviewText}&rating=${rating}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!res.ok) {
+      console.error("Failed to post review:", res);
+      return;
+    }
+
+    // After posting the review, fetch updated reviews and reset form fields
+    const data = await res.json();
+    if (data === "success") {
+      setReviewText("");
+      setRating(null);
+      // Refresh reviews after submitting
+      getReviews();
+    }
+  };
+
   return (
     <>
       <dialog id="add_review_modal" className="modal">
@@ -75,49 +134,35 @@ export default function ToiletInfo({
               placeholder="Write your review here..."
               className="textarea textarea-bordered w-full"
               rows={4}
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
               required
             ></textarea>
           </div>
 
           {/* Star Rating */}
-          <div className="form-control my- flex flex-col">
+          <div className="form-control my-4">
             <label className="label">
               <span className="label-text">Rating</span>
             </label>
             <div className="rating rating-lg">
-              <input
-                type="radio"
-                name="rating-5"
-                className="mask mask-star-2 bg-yellow-400 hover:opacity-50"
-              />
-              <input
-                type="radio"
-                name="rating-5"
-                className="mask mask-star-2 bg-yellow-400 hover:opacity-50"
-              />
-              <input
-                type="radio"
-                name="rating-5"
-                className="mask mask-star-2 bg-yellow-400 hover:opacity-50"
-              />
-              <input
-                type="radio"
-                name="rating-5"
-                className="mask mask-star-2 bg-yellow-400 hover:opacity-50"
-              />
-              <input
-                type="radio"
-                name="rating-5"
-                className="mask mask-star-2 bg-yellow-400 hover:opacity-50"
-              />
+              {[1, 2, 3, 4, 5].map((star) => (
+                <input
+                  key={star}
+                  type="radio"
+                  name="rating"
+                  className="mask mask-star-2 bg-yellow-400 hover:opacity-50"
+                  checked={rating === star}
+                  onChange={() => setRating(star)}
+                />
+              ))}
             </div>
           </div>
 
           {/* Modal Footer with Submit */}
           <div className="modal-action">
-            <button className="btn btn-primary">Submit Review</button>
-            <button className="btn" method="dialog">
-              Cancel
+            <button className="btn btn-primary" onClick={handleReviewSubmit}>
+              Submit Review
             </button>
           </div>
         </div>
@@ -125,6 +170,7 @@ export default function ToiletInfo({
           <button>close</button>
         </form>
       </dialog>
+
       {toilet != null && (
         <div className="absolute max-w-6xl mx-auto min-h-80 bottom-4 left-4 right-4 bg-base-100 text-primary-content flex p-4 justify-between px-6 rounded-xl shadow-md z-[1000]">
           <div className="w-full">
@@ -162,12 +208,12 @@ export default function ToiletInfo({
             <div className="divider"></div>
             <p className="text-xl underline">Reviews</p>
             <div className="w-full max-h-48 overflow-scroll">
-                <div className="flex flex-col gap-4 text-sm text-base-content">
-                  {reviews.map((x, i) => (
-                    <Review review={x} key={i} />
-                  ))}
-                </div>
+              <div className="flex flex-col gap-4 text-sm text-base-content">
+                {reviews.map((x, i) => (
+                  <Review review={x} key={i} />
+                ))}
               </div>
+            </div>
           </div>
           <button
             className="btn rounded-full bg-accent text-accent-content"
