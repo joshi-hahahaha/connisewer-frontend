@@ -1,15 +1,27 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 function Navbar() {
-  // TODO: update this - temporary state
   const [signedIn, setSignedIn] = useState<boolean>(false);
 
-  const tempToggle = () => {
-    setSignedIn(!signedIn);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token !== null) {
+      setSignedIn(true);
+    } else {
+      setSignedIn(false);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setSignedIn(false);
+
+    router.push("/");
   };
 
   const router = useRouter();
@@ -51,11 +63,8 @@ function Navbar() {
       {/* Right Side: Login or User Profile */}
       <div className="flex gap-4">
         {signedIn ? (
-          <button
-            onClick={tempToggle}
-            className="text-sm text-primary-content hover:text-secondary-content transition"
-          >
-            User pfp
+          <button onClick={handleLogout} className="btn btn-primary">
+            Logout
           </button>
         ) : (
           <>
