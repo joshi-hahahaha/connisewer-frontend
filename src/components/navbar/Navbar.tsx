@@ -8,9 +8,9 @@ function Navbar() {
   const [signedIn, setSignedIn] = useState<boolean>(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log(token !== null);
-    if (token !== null) {
+    const id = localStorage.getItem("id");
+    console.log(id !== null);
+    if (id !== null) {
       setSignedIn(true);
     } else {
       setSignedIn(false);
@@ -18,7 +18,7 @@ function Navbar() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("id");
     setSignedIn(false);
 
     router.push("/");

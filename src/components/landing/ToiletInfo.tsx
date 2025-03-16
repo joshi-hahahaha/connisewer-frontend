@@ -98,7 +98,11 @@ export default function ToiletInfo({
     if (!reviewText || !rating || !toilet) return;
 
     const res = await fetch(
-      `${API}/user/post-review?toilet_id=${toilet.id}&text=${reviewText}&rating=${rating}`,
+      `${API}/user/post-review?toilet_id=${encodeURIComponent(
+        toilet.id
+      )}&text=${encodeURIComponent(reviewText)}&rating=${encodeURIComponent(
+        rating
+      )}`,
       {
         method: "POST",
         headers: {
@@ -118,7 +122,7 @@ export default function ToiletInfo({
       setReviewText("");
       setRating(null);
       // Refresh reviews after submitting
-      getReviews();
+      // getReviews();
     }
   };
 
