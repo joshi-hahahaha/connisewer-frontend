@@ -50,7 +50,8 @@ export default function ToiletInfo({
               text: x.text,
               rating: x.rating,
               toilet: x.toilet,
-              user: userInfo.name,
+              user: x.user,
+              username: userInfo.name,
             };
           })
         )
