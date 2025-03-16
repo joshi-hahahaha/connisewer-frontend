@@ -9,7 +9,7 @@ function Navbar() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
+    console.log(token !== null);
     if (token !== null) {
       setSignedIn(true);
     } else {
