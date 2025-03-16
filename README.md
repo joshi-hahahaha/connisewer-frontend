@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Inspiration
+wherever you are, there will always be times when you need to do your bussiness. During these times, even in familiar areas you might not know where the best toilets are at the moment. So, we thought of a way that allows us to get this information with ease, and that is resulted in Connisewer.
 
-## Getting Started
+## What it does
+Connisewer is a web app that helps users find the best, clean toilets in their area.
 
-First, run the development server:
+Connisewer features include, but not limited to:
+* real-time reviews and rating, location, facility conditions and amenities
+* location-based searches
+* making a review, which has rating as well
+* interactive map
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How we built it
+First, We decided to make it with a seperate front-end and back-end, and since we have 4 people in our team we had 2 people working the front-end and 2 working the back-end.
+Then, we had a couple of stages in the making of this project,
+The front-end was first designed alongside deciding what technologies to use in it. 
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+We thought about which database we were going to use and didn't really think about whether we were going to use a seperate back-end or not.
+In the end, we ended up choosing MongoDB for it's object oriented like database. Then there were several languages that were brought up for the backend like javascript and python, but also C++ and Java, However because we thought for it's compatibility and convenience, either javascript or python would be the best choice and since the backend team was not really fond of javascript, we ended up going with python.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+We discussed on what features the web app would have but there was no definitive process in the making of it, there were also several features which were added either as a standalone feature or alongside some pre-decided ones.
 
-## Learn More
+The front-end mainly uses:
+* next.js
+* create-next-app
+* tailwind css
 
-To learn more about Next.js, take a look at the following resources:
+while the back-end mainly uses: Python and MongoDB.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Challenges we ran into
+For the front-end the challenges were mainly in trying to interact with the back-end as we don't really have much experience with a seperated back-end.
+Now most of the challenges came from the back-end with Flask API and MongoDB.
+We were really unfamiliar with MongoDB in general and so that was a really big part of the challenge. 
+Setting up the database, interacting with the database, querying, and manipulating the data were all the biggest challenges. However, the second biggest challenge was really deciding on what database structure we would be using, we were quite confused during production with a lot of changes happening to the database structure. 
+Second, one of people in the back-end team was not really familiar with the flask API and so going implementing routes were a little bit of a challenge in the start but probably not as much when were implementing sessions and access tokens in the logins and user signups part of the projects, we weren't familiar with flask_session and JWTs
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Accomplishments that we're proud of
+1. the completed design of the front-end as well as making it work and interacting with the back-end
+2. just the mere completion of success of implementation for the whole entirety of the back-end, the things were most proud of are probably in managing to arguably effectively interact with the database, and making the database work in the way we wanted it to.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## What we learned
+the biggest thing we learned was in working with a team, collaborating, and communicating with a team.
+
+While some of the technical stuff we learned includes:
+* connecting a seperate front-end with the back-end
+* making sessions
+* debugging relatively vague problems
+* designing a web app
+
+## What's next for Connisewer
+Possible making it worldwide, improving running times, and adding searching possibilites
