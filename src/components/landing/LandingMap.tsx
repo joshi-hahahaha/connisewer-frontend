@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import Navbar from "../navbar/Navbar";
+// import Navbar from "../navbar/Navbar";
+import LandingNav from "./LandingNav";
 import ToiletInfo from "./ToiletInfo";
 import { PublicToilets, ToiletType } from "./PublicToilets";
 import RoutingMachine from "./RoutingMachine";
@@ -68,7 +69,7 @@ const SearchArea = ({ setBounds }: { setBounds: (bounds: [number, number, number
 }
 
 const LandingMap = () => {
-  const defaultCenter: [number, number] = [-33.8708, 151.2073];
+  const defaultCenter = useMemo(() => [-33.8708, 151.2073] as [number, number], []);
   const [userLocation, setUserLocation] = useState<[number, number]>(defaultCenter);
   const [zoom,] = useState(11);
   const [selectedToilet, setSelectedToilet] = useState<ToiletType | null>(null);
@@ -88,7 +89,7 @@ const LandingMap = () => {
         }
       );
     }
-  }, []);
+  }, [defaultCenter]);
 
   useEffect(() => {
     setShowToilets(!routeFinish) // hide toilets when routing
@@ -100,12 +101,12 @@ const LandingMap = () => {
 
   return (
     <div className="h-screen w-screen z-0">
-      <Navbar />
       <MapContainer
         center={userLocation || defaultCenter}
         zoom={zoom}
         className="h-full w-full"
       >
+        <LandingNav setBounds={setBounds} />
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

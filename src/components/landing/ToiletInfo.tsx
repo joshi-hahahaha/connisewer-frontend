@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { ToiletType } from "./PublicToilets";
 import Review, { ReviewType } from "./Review";
+import RatingRead from "./RatingRead";
 
 type ToiletProps = {
   toilet: ToiletType | null;
@@ -12,7 +13,7 @@ type ToiletProps = {
 
 export default function ToiletInfo({ toilet, setSelectedToilet, setRouteFinish }: ToiletProps) {
   const [reviews, setReviews] = useState<ReviewType[]>([]);
-
+  const [avgRating, setAvgRating] = useState<number | null>(null)
   useEffect(() => {
     async function getReviews() {
       const res = await fetch("https://connisewer.onrender.com/reviews/toiletId=" + toilet?.id);
@@ -20,27 +21,31 @@ export default function ToiletInfo({ toilet, setSelectedToilet, setRouteFinish }
         console.log(res)
       }
 
-      const reviews: ReviewType[] = await res.json();
+      const data: { reviews: ReviewType[], average: number } = await res.json();
 
-      setReviews(reviews);
+      if (!!data.reviews) {
+        console.log(data.reviews);
+        setReviews(data.reviews);
+        Promise.all(data.reviews.map(async x => {
+          const res = await fetch("https://connisewer.onrender.com/user/id=" + x.user);
+          if (!res.ok) {
+            console.log(res)
+          }
+          const userInfo = await res.json();
+          return {
+            _id: x._id,
+            text: x.text,
+            rating: x.rating,
+            toilet: x.toilet,
+            user: userInfo.name
+          };
+        })).then(r => setReviews(r)).catch(e => console.log(e));
+      }
+      if (!!data.average) {
+        setAvgRating(data.average);
+      }
 
-      const thingo = await Promise.all(reviews.map(async x => {
-        const res = await fetch("https://connisewer.onrender.com/user/id=" + x.user);
-        if (!res.ok) {
-          console.log(res)
-        }
-        const userInfo = await res.json();
-        console.log(userInfo);
-        return {
-          _id: x._id,
-          text: x.text,
-          rating: x.rating,
-          toilet: x.toilet,
-          user: userInfo.name
-        };
-      }));
 
-      setReviews(thingo);
     }
 
     if (toilet !== null) {
@@ -57,6 +62,7 @@ export default function ToiletInfo({ toilet, setSelectedToilet, setRouteFinish }
               <p className="text-5xl">{toilet.title}</p>
               <p className="text-xs">{toilet.id}</p>
               <p className="text-sm">Coordinates: {toilet.lat}, {toilet.lon}</p>
+              {!avgRating ? <p className="text-base-content">no reviews</p> : <div className="flex items-center gap-2"><p>Average Rating: {avgRating}</p><RatingRead rating={avgRating} /></div>}
               <p>{toilet.desc}</p>
               <div className="flex gap-2 mt-2">
                 <button className="btn btn-outline btn-accent text-accent-content">Add Review</button>
@@ -76,6 +82,5 @@ export default function ToiletInfo({ toilet, setSelectedToilet, setRouteFinish }
         )
       }
     </>
-
   )
 }
