@@ -1,29 +1,29 @@
-import React, { useState, useEffect } from 'react'
-import { Marker, Popup } from 'react-leaflet'
+import React, { useState, useEffect } from "react";
+import { Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 
-export type BboxType = [number, number, number, number]
+export type BboxType = [number, number, number, number];
 
 type PropType = {
-  bbox: BboxType
+  bbox: BboxType;
   setSelectedToilet: (toilet: ToiletType | null) => void;
-}
+};
 
 const toiletLocationIcon = new L.Icon({
-  iconUrl: "/pin-location-icon.svg",
+  iconUrl: "/pin-1.svg",
   iconSize: [36, 36],
   iconAnchor: [18, 18],
   popupAnchor: [0, -36],
-})
+});
 
 export type ToiletType = {
   id: number;
-  title: string,
+  title: string;
   lon: number;
   lat: number;
   desc: string;
   reviews: [];
-}
+};
 
 export const PublicToilets = ({ bbox, setSelectedToilet }: PropType) => {
   const [toilets, setToilets] = useState<ToiletType[]>([]);
@@ -42,23 +42,35 @@ export const PublicToilets = ({ bbox, setSelectedToilet }: PropType) => {
           out;
         `;
 
-      const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
+      const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(
+        query
+      )}`;
 
       try {
         const response = await fetch(url);
         if (response.ok) {
           const data = await response.json();
           if (data.elements) {
-            setToilets(data.elements.map((x: { id: string; lat: number; lon: number; tags: object }) => {
-              return {
-                id: x.id,
-                title: !!x.tags.name ? x.tags.name : x.tags.operator ? x.tags.operator : "Public Toilet",
-                lon: x.lon,
-                lat: x.lat,
-                desc: Object.entries(x.tags).map(([k, v]) => `${k}: ${v}`).join(",\n"),
-                reviews: []
-              };
-            }));
+            setToilets(
+              data.elements.map(
+                (x: { id: string; lat: number; lon: number; tags: object }) => {
+                  return {
+                    id: x.id,
+                    title: !!x.tags.name
+                      ? x.tags.name
+                      : x.tags.operator
+                      ? x.tags.operator
+                      : "Public Toilet",
+                    lon: x.lon,
+                    lat: x.lat,
+                    desc: Object.entries(x.tags)
+                      .map(([k, v]) => `${k}: ${v}`)
+                      .join(",\n"),
+                    reviews: [],
+                  };
+                }
+              )
+            );
           }
         }
       } catch (error) {
@@ -78,7 +90,8 @@ export const PublicToilets = ({ bbox, setSelectedToilet }: PropType) => {
         click: () => {
           setSelectedToilet(toilet);
         },
-      }}>
+      }}
+    >
       <Popup>{toilet.title}</Popup>
     </Marker>
   ));
