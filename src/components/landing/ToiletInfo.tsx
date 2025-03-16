@@ -99,11 +99,7 @@ export default function ToiletInfo({
     if (!reviewText || !rating || !toilet) return;
 
     const res = await fetch(
-      `${API}/user/post-review?toilet_id=${encodeURIComponent(
-        toilet.id
-      )}&text=${encodeURIComponent(reviewText)}&rating=${encodeURIComponent(
-        rating
-      )}`,
+      `${API}/user/post-review?toilet_id=${toilet.id}&text=${reviewText}&rating=${rating}`,
       {
         method: "POST",
         headers: {
