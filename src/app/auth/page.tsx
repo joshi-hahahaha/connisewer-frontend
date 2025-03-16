@@ -45,7 +45,7 @@ const AuthPage = () => {
 
     const endpoint = isLogin ? "auth/login" : "auth/register";
     const body = isLogin
-      ? { username: formData.username, password: formData.password }
+      ? { email: formData.email, password: formData.password }
       : {
           username: formData.username,
           email: formData.email,
