@@ -77,7 +77,7 @@ export default function ToiletInfo({
               <p className="text-base-content">no reviews</p>
             ) : (
               <div className="flex items-center gap-2">
-                <p>Average Rating: {avgRating}</p>
+                <p>Average Rating: {avgRating.toFixed(2)}</p>
                 <RatingRead rating={avgRating} />
               </div>
             )}
@@ -96,11 +96,13 @@ export default function ToiletInfo({
             </div>
             <div className="divider"></div>
             <p className="text-xl underline">Reviews</p>
-            <div className="flex flex-col gap-4 text-sm text-base-content">
-              {reviews.map((x, i) => (
-                <Review review={x} key={i} />
-              ))}
-            </div>
+            <div className="w-full max-h-48 overflow-scroll">
+                <div className="flex flex-col gap-4 text-sm text-base-content">
+                  {reviews.map((x, i) => (
+                    <Review review={x} key={i} />
+                  ))}
+                </div>
+              </div>
           </div>
           <button
             className="btn rounded-full bg-accent text-accent-content"
