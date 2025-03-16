@@ -65,6 +65,66 @@ export default function ToiletInfo({
 
   return (
     <>
+      <dialog id="add_review_modal" className="modal">
+        <div className="modal-box text-primary-content">
+          <h3 className="font-bold text-lg">Leave a Review!</h3>
+
+          {/* Review Comment */}
+          <div className="form-control my-4">
+            <textarea
+              placeholder="Write your review here..."
+              className="textarea textarea-bordered w-full"
+              rows={4}
+              required
+            ></textarea>
+          </div>
+
+          {/* Star Rating */}
+          <div className="form-control my- flex flex-col">
+            <label className="label">
+              <span className="label-text">Rating</span>
+            </label>
+            <div className="rating rating-lg">
+              <input
+                type="radio"
+                name="rating-5"
+                className="mask mask-star-2 bg-yellow-400 hover:opacity-50"
+              />
+              <input
+                type="radio"
+                name="rating-5"
+                className="mask mask-star-2 bg-yellow-400 hover:opacity-50"
+              />
+              <input
+                type="radio"
+                name="rating-5"
+                className="mask mask-star-2 bg-yellow-400 hover:opacity-50"
+              />
+              <input
+                type="radio"
+                name="rating-5"
+                className="mask mask-star-2 bg-yellow-400 hover:opacity-50"
+              />
+              <input
+                type="radio"
+                name="rating-5"
+                className="mask mask-star-2 bg-yellow-400 hover:opacity-50"
+              />
+            </div>
+          </div>
+
+          {/* Modal Footer with Submit */}
+          <div className="modal-action">
+            <button className="btn btn-primary">Submit Review</button>
+            <button className="btn" method="dialog">
+              Cancel
+            </button>
+          </div>
+        </div>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
       {toilet != null && (
         <div className="absolute max-w-6xl mx-auto min-h-80 bottom-4 left-4 right-4 bg-base-100 text-primary-content flex p-4 justify-between px-6 rounded-xl shadow-md z-[1000]">
           <div className="w-full">
@@ -83,7 +143,12 @@ export default function ToiletInfo({
             )}
             <p>{toilet.desc}</p>
             <div className="flex gap-2 mt-2">
-              <button className="btn btn-outline btn-accent text-accent-content">
+              <button
+                className="btn btn-outline btn-accent text-accent-content"
+                onClick={() =>
+                  document.getElementById("add_review_modal").showModal()
+                }
+              >
                 Add Review
               </button>
               <button
