@@ -66,8 +66,10 @@ const AuthPage = () => {
       const data = await res.json();
       console.log("Response:", data);
 
-      if (data.access_token) {
-        localStorage.setItem("token", data.access_token);
+      if (data) {
+        localStorage.setItem("id", data._id);
+        localStorage.setItem("name", data.name);
+        localStorage.setItem("email", data.email);
         router.push("/");
       } else {
         throw new Error("Invalid response from server.");
