@@ -1,13 +1,29 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
-export default function Profile() {
+// userID should be pass
+export default function Profile({ id } : { id : string }) {
   const router = useRouter();
-  const [user, setUser] = useState("John_Doe2");
-  const [email, setEmail] = useState("email@email.com");
+  const [user, setUser] = useState("loading");
+  const [email, setEmail] = useState("loading@loading.com");
   const [isDisabled, setIsDisabled] = useState(true);
+
+  useEffect(() => {
+    const getUserInfo = async function() {
+      console.log(`getting info of user: id = ${id}`)
+      if (!id) return;
+      const res = await fetch("https://connisewer.onrender.com/user/info/id=" + id)
+      if (!!res.ok) {
+        const user = await res.json();
+        setUser(user.name)
+        setEmail(user.email)
+      }
+    }
+
+    getUserInfo();
+  }, [id]);
+
   const handleLogOut = () => {
     // logout
     // navigate to home page
@@ -26,10 +42,12 @@ export default function Profile() {
       <div className="flex">
         <div className="avatar">
           <div className="w-24 rounded">
-            <Image
+            {/* <Image
+              height={24}
+              width={24}
               src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
               alt=""
-            />
+            /> */}
           </div>
         </div>
         <div className="p-4 flex flex-col gap-4 w-100">
@@ -37,7 +55,7 @@ export default function Profile() {
             <span>Username</span>
             <input
               type="text"
-              placeholder="Username"
+              // placeholder="Username"
               className="input input-lg w-full"
               value={user}
               onChange={(e) => setUser(e.target.value)}
@@ -48,7 +66,7 @@ export default function Profile() {
             <span>Email</span>
             <input
               type="text"
-              placeholder="Username"
+              // placeholder="Username"
               className="input input-lg w-full"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
